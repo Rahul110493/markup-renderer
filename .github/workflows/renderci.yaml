@@ -7,8 +7,8 @@ on:
       - main
 
 env:
-  PROJECT_ID: ${{ secrets.PROJECT_ID }}
-  CLUSTER_ZONE: asia-south1-a
+  CLOUD_RUN_PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  CLOUD_RUN_REGION: asia-south1-a
   REPO_NAME: renderer
 
 jobs:
@@ -23,7 +23,7 @@ jobs:
     # This step is where our service account will be authenticated
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        project_id: ${{ secrets.PROJECT_ID }}
+        project_id: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
         service_account_key: ${{ secrets.SERVICE_ACCOUNT }}      
 
     - name: Enable docker auth
@@ -34,11 +34,11 @@ jobs:
         
     - name: Build and tag image
       run: |-
-        docker build . --tag "gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA"
+        docker build . --tag "gcr.io/$CLOUD_RUN_PROJECT_ID/$REPO_NAME:$GITHUB_SHA"
         
     - name: Push image to GCR
       run: |-
-        docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
+        docker push gcr.io/$CLOUD_RUN_PROJECT_ID/$REPO_NAME:$GITHUB_SHA
         
     - name: Deploy
       run: |-

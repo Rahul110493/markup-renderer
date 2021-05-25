@@ -24,17 +24,26 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         project_id: ${{ secrets.PROJECT_ID }}
-        service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
-        
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT }}      
 
     - name: Enable docker auth
       run: |-
         gcloud services enable containerregistry.googleapis.com
         gcloud services enable run.googleapis.com      
         gcloud --quiet auth configure-docker
+        
     - name: Build and tag image
       run: |-
         docker build . --tag "gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA"
+        
     - name: Push image to GCR
       run: |-
         docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
+        
+    - name: Deploy
+      run: |-
+        gcloud run deploy renderer --image gcr.io/$CLOUD_RUN_PROJECT_ID/$REPO_NAME:$GITHUB_SHA \
+          --project $CLOUD_RUN_PROJECT_ID \
+          --platform managed \
+          --region $CLOUD_RUN_REGION \
+          --no-allow-unauthenticated

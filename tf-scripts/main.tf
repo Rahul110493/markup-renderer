@@ -1,32 +1,32 @@
 terraform {
   required_providers {
     google = {
-      source = "hashicorp/google-beta"
+      source  = "hashicorp/google-beta"
       version = "3.70.0"
     }
   }
 }
 provider "google" {
-  project = "${var.project_id}"
-  region  = "${var.region}"
+  project = var.project_id
+  region  = var.region
 }
 
 resource "google_service_account" "sa-name" {
-  account_id = "renderer-identity"
+  account_id   = "renderer-identity"
   display_name = "renderer-identity"
 }
 
 resource "google_cloud_run_service" "default" {
   name     = "renderer"
-  location = "${var.region}"
+  location = var.region
 
   template {
     spec {
       containers {
-        image = "${var.docker_image}"
+        image = var.docker_image
         ports {
           container_port = 80
-         }        
+        }
       }
     }
   }

@@ -4,7 +4,7 @@ name: Provisioning infrastructure and Deployment for renderer CloudRun
 on: 
   push:
     branches:
-      - dev
+      - feat-tf
       
 env:
   PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}

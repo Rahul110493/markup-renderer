@@ -5,7 +5,7 @@ on:
       - feat-tf     
 env:
   PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
-  GOOGLE_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}  
+  GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA }}  
   REPO_NAME: renderer
   RUN_REGION: europe-west1
   BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
@@ -20,7 +20,7 @@ jobs:
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
         version: '290.0.1'
-        service_account_key: ${{ secrets.SERVICE_ACCOUNT }}  
+        service_account_key: ${{ secrets.GCP_SA }}  
         export_default_credentials: true
         project_id: ${{ secrets.CLOUD_RUN_PROJECT_ID }}      
     - name: Create tf state bucket    

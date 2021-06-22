@@ -28,6 +28,7 @@ resource "google_cloud_run_service" "default" {
           container_port = 80
         }
       }
+      service_account_name = "renderer-identity@nodejsapp-314207.iam.gserviceaccount.com"  
     }
   }
 }

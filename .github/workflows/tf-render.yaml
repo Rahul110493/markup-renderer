@@ -31,7 +31,7 @@ jobs:
         
     - name: Create tf state bucket    
       run: |-
-        if ! gsutil ls | grep gs://$BUCKET_NAME ;then gsutil mb -p $PROJECT_ID -l $RUN_REGION -b on gs://$BUCKET_NAME;fi   
+        if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi   
         
     - name: Enable docker auth
       run: |-     
@@ -39,11 +39,11 @@ jobs:
         
     - name: Build and tag image
       run: |-
-        docker build . --tag gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA
+        docker build . --tag gcr.io/${{ env.PROJECT_ID }}/$REPO_NAME:$GITHUB_SHA
         
     - name: Push image to GCR
       run: |-
-        docker push gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA          
+        docker push gcr.io/${{ env.PROJECT_ID }}/$REPO_NAME:$GITHUB_SHA          
   
     # Terraform remote state GCS
     - name: Setup Terraform
@@ -66,7 +66,7 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}   
     - name: Terraform apply
       id: apply
-      run: terraform apply -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" -auto-approve 
+      run: terraform apply -var="docker_image=gcr.io/${{ env.PROJECT_ID }}/$REPO_NAME:$GITHUB_SHA" -auto-approve 
       continue-on-error: false
       working-directory: ./tf-scripts
       env:

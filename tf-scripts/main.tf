@@ -11,10 +11,10 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_service_account" "sa-name" {
-  account_id   = "renderer-identity"
-  display_name = "renderer-identity"
-}
+# resource "google_service_account" "sa-name" {
+#   account_id   = "renderer-identity"
+#   display_name = "renderer-identity"
+# }
 
 resource "google_cloud_run_service" "default" {
   name     = "renderer"
@@ -28,7 +28,7 @@ resource "google_cloud_run_service" "default" {
           container_port = 80
         }
       }
-      service_account_name = "renderer-identity@nodejsapp-314207.iam.gserviceaccount.com"  
+#       service_account_name = "renderer-identity@nodejsapp-314207.iam.gserviceaccount.com"  
     }
   }
 }
@@ -37,7 +37,7 @@ data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
     members = [
-      "serviceAccount:editor-identity@nodejsapp-314207.iam.gserviceaccount.com",
+      "serviceAccount:ci-874@nodejsapp-314207.iam.gserviceaccount.com",
     ]
   }
 }

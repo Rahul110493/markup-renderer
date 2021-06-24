@@ -40,7 +40,7 @@ jobs:
       uses: hashicorp/setup-terraform@v1
     - name: Terraform init
       id: init
-      run: terraform init
+      run: terraform init -backend-config="bucket=terraform1-state-renderer" -backend-config="prefix=dev"
       continue-on-error: false
       working-directory: ./tf-scripts
       env:

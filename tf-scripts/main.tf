@@ -23,7 +23,7 @@ resource "google_cloud_run_service" "default" {
           container_port = 80
         }
       }
-      service_account_name = "cloudrun-identity"  
+      service_account_name = "cloudrun-identity@nodejsapp-314207.iam.gserviceaccount.com"  
     }
   }
 }
@@ -32,7 +32,7 @@ data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
     members = [
-      "serviceAccount:cloudrun-identity",
+      "serviceAccount:cloudrun-identity@nodejsapp-314207.iam.gserviceaccount.com",
     ]
   }
 }

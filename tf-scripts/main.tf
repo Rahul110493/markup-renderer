@@ -11,11 +11,6 @@ provider "google" {
   region  = var.region
 }
 
-# resource "google_service_account" "sa-name" {
-#   account_id   = "renderer-identity"
-#   display_name = "renderer-identity"
-# }
-
 resource "google_cloud_run_service" "default" {
   name     = "renderer"
   location = var.region
@@ -28,7 +23,7 @@ resource "google_cloud_run_service" "default" {
           container_port = 80
         }
       }
-#       service_account_name = "renderer-identity@nodejsapp-314207.iam.gserviceaccount.com"  
+      service_account_name = "cloudrun-identity"  
     }
   }
 }
@@ -37,7 +32,7 @@ data "google_iam_policy" "noauth" {
   binding {
     role = "roles/run.invoker"
     members = [
-      "serviceAccount:541757150123-compute@developer.gserviceaccount.com",
+      "serviceAccount:cloudrun-identity",
     ]
   }
 }

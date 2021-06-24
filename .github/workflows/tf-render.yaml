@@ -57,7 +57,13 @@ jobs:
         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }} 
     - name: Terraform apply
       id: apply
-      run: terraform apply -var="docker_image=gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA" -auto-approve 
+      run: |-
+        terraform apply \
+            -var="docker_image=gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA" \
+            -var="service_name=renderer" \
+            -var="cloudrun_sa=cloudrun-identity@nodejsapp-314207.iam.gserviceaccount.com" \
+            -var="invoker_member=serviceAccount:cloudrun-identity@nodejsapp-314207.iam.gserviceaccount.com"  \
+            -auto-approve 
       continue-on-error: false
       working-directory: ./tf-scripts
       env:

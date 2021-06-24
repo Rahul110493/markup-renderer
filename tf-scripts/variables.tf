@@ -15,3 +15,16 @@ variable "docker_image" {
   type        = string
   default     = ""
 }
+
+
+variable "cloudrun_sa" {
+  description = "cloudrun_sa for Opt Out Application."
+  type =string
+  default = ""
+}
+
+variable "service_name" {
+  description = "service_name for Opt Out Application."
+  type =string
+  default = ""
+}

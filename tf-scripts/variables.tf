@@ -28,3 +28,9 @@ variable "service_name" {
   type =string
   default = ""
 }
+
+variable "invoker_member" {
+  description = "invoker_member for Opt Out Application."
+  type =string
+  default = ""
+}

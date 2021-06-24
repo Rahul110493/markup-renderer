@@ -25,7 +25,10 @@ jobs:
         project_id: ${{ secrets.CLOUD_RUN_PROJECT_ID }}      
     - name: Create tf state bucket    
       run: |-
-        if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi        
+        if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi   
+    - name: Create cloud run sa   
+      run: |-
+        if ! gcloud iam service-accounts list | grep cloudrun-identity ;then gcloud iam service-accounts create cloudrun-identity;fi       
     - name: Enable docker auth
       run: |-     
         gcloud --quiet auth configure-docker      

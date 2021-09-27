@@ -205,12 +205,6 @@ variable "service_account_email" {
   default     = ""
 }
 
-variable "create_sa" {
-  description = "create service account for cloud"
-  type        = bool
-  default     = true
-}
-
 variable "vpc_connector" {
   type        = string
   description = "(Optional) If provided, the vpc connector to use"

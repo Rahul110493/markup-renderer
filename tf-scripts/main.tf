@@ -19,13 +19,13 @@ provider "alicloud" {
 
 module "enable-api" {
   count = var.vendor == "gcp" ? 1 : 0
-  source= "./gcp/service/api-resources"
+  source= "./tf-scripts/gcp/service/api-resources"
   gcp_service_list=var.gcp_service_list
 }
   
 module "service-account" {
   count = var.vendor == "gcp" ? 1 : 0
-  source= "./gcp/service/service-account"
+  source= "./tf-scripts/gcp/service/service-account"
   service_account_id= var.service_account_id
   service_account_name= var.service_account_name
   sa_permission_list=var.sa_permission_list
@@ -33,7 +33,7 @@ module "service-account" {
   
 module "gcp-cloudrun" {
     count = var.vendor == "gcp" && var.vendor_service == "cloudrun" ? 1 : 0
-    source = "./gcp/service/cloudrun"
+    source = "./tf-scripts/gcp/service/cloudrun"
     
     project_id = var.project_id
     region = var.region
@@ -50,7 +50,7 @@ module "gcp-cloudrun" {
 
 module "gcp-gke" {
     count = var.vendor == "gcp" && var.vendor_service == "gke" ? 1 : 0
-    source = "./gcp/service/gke"
+    source = "./tf-scripts/gcp/service/gke"
 
     project_id = var.project_id
     region = var.region
@@ -70,7 +70,7 @@ module "gcp-gke" {
 
   module "gcp-cloudfunctions" {
   count = var.vendor == "gcp" && var.vendor_service == "cloudfunctions" ? 1 : 0
-  source = "./gcp/service/cloudfunctions"
+  source = "./tf-scripts/gcp/service/cloudfunctions"
         
   function_name         = var.function_name    
   description           = var.description != "" ? var.description : "${var.name} HTTP Cloud Function"
@@ -87,7 +87,7 @@ module "gcp-gke" {
     
 module "alicloud-ack" {
     count = var.vendor == "alicloud" && var.vendor_service == "ack" ? 1 : 0
-    source = "./alicloud/service/ack"
+    source = "./tf-scripts/alicloud/service/ack"
 
     name = var.name
 #   region = var.ali_region

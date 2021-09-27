@@ -1,6 +1,0 @@
-project_id   = ""
-region       = "europe-west1"
-docker_image = ""
-service_name = "" 
-cloudrun_sa = ""
-invoker_member = ""

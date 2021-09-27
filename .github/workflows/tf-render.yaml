@@ -51,18 +51,17 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |-
-         echo $CREATE_SA
          terraform plan \
           -var="project_id=$PROJECT_ID" \
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var='sa_permission_list=["roles/run.invoker","roles/viewer"]' \
+          -var='sa_permission_list=[""]' \
           -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
-          -var="service_account_id=cloudrun-identity" \
-          -var="service_account_name=cloudrun-identity" \
-          -var="cloudrun_service_account=cloudrun-identity@$PROJECT_ID.iam.gserviceaccount.com" \
-          -var="invoker_member=serviceAccount:cloudrun-identity@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="service_account_id=renderer-identity" \
+          -var="service_account_name=renderer-identity" \
+          -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="invoker_member=serviceAccount:renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
           -var="vendor=gcp" \
           -var="vendor_service=cloudrun" \
           -out=PLAN

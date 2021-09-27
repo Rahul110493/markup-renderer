@@ -56,7 +56,7 @@ jobs:
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var='sa_permission_list=[""]' \
+          -var='sa_permission_list=["roles/run.invoker"]' \
           -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
           -var="service_account_id=renderer-identity" \
           -var="service_account_name=renderer-identity" \

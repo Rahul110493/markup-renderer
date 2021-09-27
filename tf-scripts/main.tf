@@ -24,7 +24,7 @@ module "enable-api" {
 }
   
 module "service-account" {
-  count = var.vendor == "gcp" ? 1 : 0
+  count = var.vendor == "gcp" && var.create_sa == true ? 1 : 0
   source= "./tf-scripts/gcp/service/service-account"
   service_account_id= var.service_account_id
   service_account_name= var.service_account_name

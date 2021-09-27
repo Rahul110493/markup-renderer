@@ -27,10 +27,6 @@ jobs:
     - name: Create tf state bucket    
       run: |-
         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
-    - name: Create SA Check
-      run: |-
-         echo "CREATE_SA=false" >> $GITHUB_ENV
-         if ! gcloud iam service-accounts list | grep cloudrun-identity ;then echo "CREATE_SA=true" >> $GITHUB_ENV;fi 
     - name: Enable docker auth
       run: |-     
         gcloud --quiet auth configure-docker      
@@ -61,7 +57,6 @@ jobs:
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var="create_sa=$CREATE_SA" \
           -var='sa_permission_list=["roles/run.invoker","roles/viewer"]' \
           -var='gcp_service_list=["iam.googleapis.com","dataflow.googleapis.com","run.googleapis.com"]' \
           -var="service_account_id=cloudrun-identity" \

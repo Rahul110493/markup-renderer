@@ -23,7 +23,7 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_SA}}
         export_default_credentials: true
-        project_id: ${{ env.CLOUD_RUN_PROJECT_ID }}     
+        project_id: ${{ env.PROJECT_ID }}     
     - name: Create tf state bucket    
       run: |-
         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
@@ -55,7 +55,7 @@ jobs:
           -var="project_id=$PROJECT_ID" \
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
-          -var="docker_image=gcr.io/$GCP_PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
           -var="service_account_id=cloudrun-identity" \
           -var="service_account_name=cloudrun-identity" \
           -var="cloudrun_service_account=cloudrun-identity@$PROJECT_ID.iam.gserviceaccount.com" \

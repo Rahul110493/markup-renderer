@@ -63,6 +63,7 @@ jobs:
           -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
+          -var="vendor_service=cloudrun" \
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts

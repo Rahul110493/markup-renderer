@@ -125,16 +125,12 @@ variable "env_key" {
   default = "dummy"
 }
 
-variable "env_value" {
-  description = "environment variable value for cloud run Application."
-  type =string
-  default = "dummy"
-}
-
-variable "access_key" {
-  description = "access_key for ali cloud"
-  type        = string
-  default     = "dummy"
+variable "env_map" {
+  type = "map"
+  default = {
+    "account1" = "accountA"
+    "account2" = "accountB"
+  }
 }
 
 variable "secret_key" {

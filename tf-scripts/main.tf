@@ -29,6 +29,7 @@ module "service-account" {
   service_account_id= var.service_account_id
   service_account_name= var.service_account_name
   sa_permission_list=var.sa_permission_list
+  depends_on = [module.enable-api]
 }
   
 module "gcp-cloudrun" {

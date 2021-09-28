@@ -17,19 +17,19 @@ provider "alicloud" {
   region     = var.ali_region
 }
 
-module "enable-api" {
-  count = var.vendor == "gcp" ? 1 : 0
-  source= "./tf-scripts/gcp/service/api-resources"
-  gcp_service_list=var.gcp_service_list
-}
+# module "enable-api" {
+#   count = var.vendor == "gcp" ? 1 : 0
+#   source= "./tf-scripts/gcp/service/api-resources"
+#   gcp_service_list=var.gcp_service_list
+# }
   
-module "service-account" {
-  count = var.vendor == "gcp" ? 1 : 0
-  source= "./tf-scripts/gcp/service/service-account"
-  service_account_id= var.service_account_id
-  service_account_name= var.service_account_name
-  sa_permission_list=var.sa_permission_list
-}
+# module "service-account" {
+#   count = var.vendor == "gcp" ? 1 : 0
+#   source= "./tf-scripts/gcp/service/service-account"
+#   service_account_id= var.service_account_id
+#   service_account_name= var.service_account_name
+#   sa_permission_list=var.sa_permission_list
+# }
   
 module "gcp-cloudrun" {
     count = var.vendor == "gcp" && var.vendor_service == "cloudrun" ? 1 : 0
@@ -44,7 +44,7 @@ module "gcp-cloudrun" {
     port = var.port
     env_key = var.env_key
     env_value = var.env_value
-    depends_on = [module.enable-api, module.service-account]
+#     depends_on = [module.enable-api, module.service-account]
   
 }
 

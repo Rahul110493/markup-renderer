@@ -51,7 +51,18 @@ jobs:
     - name: Terraform refresh
       id: refresh
       run: |-
-        terraform refresh
+         terraform refresh \
+          -var="project_id=$PROJECT_ID" \
+          -var="region=$RUN_REGION" \
+          -var="service_name=$REPO_NAME" \
+          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+          -var='sa_permission_list=["roles/run.invoker"]' \
+          -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
+          -var="service_account_id=renderer-identity" \
+          -var="service_account_name=renderer-identity" \
+          -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="invoker_member=allUsers" \
+          -var="vendor=gcp"
       continue-on-error: false
       working-directory: ./tf-scripts
       env:
@@ -71,7 +82,6 @@ jobs:
           -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
-          -var="vendor_service=cloudrun" \
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts

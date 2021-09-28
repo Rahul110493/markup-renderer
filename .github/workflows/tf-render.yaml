@@ -29,7 +29,10 @@ jobs:
         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
     - name: Enable docker auth
       run: |-     
-        gcloud --quiet auth configure-docker      
+        gcloud --quiet auth configure-docker   
+    - name: Check and create cloud run service account   
+      run: |-
+        if ! gcloud iam service-accounts list | grep cloudrun-identity ;then gcloud iam service-accounts create cloudrun-identity;fi        
     - name: Build and tag image
       run: |-
         docker build . --tag gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA      
@@ -52,14 +55,12 @@ jobs:
       id: plan
       run: |-
          terraform plan \
-          -var="project_id=$PROJECT_ID" \
+          -var="project_id=${{ env.PROJECT_ID }}" \
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
-          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com"]' \
-          -var="service_account_id=renderer" \
-          -var="service_account_name=renderer" \
-          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="docker_image=gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA" \
+          -var="port=80" \
+          -var="cloudrun_service_account=cloudrun-identity@${{ env.PROJECT_ID }}.iam.gserviceaccount.com" \
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
           -var="vendor_service=cloudrun" \

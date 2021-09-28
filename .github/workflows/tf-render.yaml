@@ -3,7 +3,7 @@ name: Provisioning infrastructure and Deployment for renderer CloudRun
 on: 
   push:
     branches:
-      - feat-tf     
+      - feat-test
 env:
   PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
   GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA }}  

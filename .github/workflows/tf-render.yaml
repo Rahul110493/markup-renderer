@@ -10,6 +10,7 @@ env:
   REPO_NAME: renderer
   RUN_REGION: europe-west1
   BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+  DEFAULT_API: 'iam.googleapis.com'  
 jobs:
   setup-build-deploy-cloudrun:
     name: "Setup, Build, and Deploy CloudRun- '${{github.ref}}'"
@@ -23,7 +24,10 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_SA}}
         export_default_credentials: true
-        project_id: ${{ env.PROJECT_ID }}     
+        project_id: ${{ env.PROJECT_ID }}  
+    - name: IAM API Enable    
+      run: |-
+        gcloud services enable ${{env.DEFAULT_API}}        
     - name: Create tf state bucket    
       run: |-
         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
@@ -56,13 +60,13 @@ jobs:
           -var="region=$RUN_REGION" \
           -var="service_name=$REPO_NAME" \
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com"]' \
           -var="service_account_id=renderer" \
           -var="service_account_name=renderer" \
           -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
           -var="vendor_service=cloudrun" \
+          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars' \
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts

@@ -126,7 +126,11 @@ variable "env_map" {
     "account2" = "accountB"
   }
 }
-
+variable "access_key" {
+  description = "access_key for ali cloud"
+  type        = string
+  default     = "dummy"
+}
 variable "secret_key" {
   description = "secret_key for ali cloud"
   type        = string

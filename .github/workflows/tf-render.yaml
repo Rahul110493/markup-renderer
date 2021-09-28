@@ -67,7 +67,7 @@ jobs:
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
           -var="vendor_service=cloudrun" \
-          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars' \
+          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts

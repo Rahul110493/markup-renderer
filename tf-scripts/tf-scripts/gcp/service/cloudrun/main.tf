@@ -6,9 +6,10 @@ resource "google_cloud_run_service" "default" {
     spec {
       containers {
         image = "${var.docker_image}"
+        for_each =  var.env_list
         env {
-          name = "${var.env_key}"
-          value = "${var.env_value}"
+          name = "${each.key}"
+          value = "${each.value}"
         }
         ports {
           container_port = var.port

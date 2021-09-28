@@ -48,25 +48,25 @@ jobs:
       working-directory: ./tf-scripts
       env:
         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}
-    - name: Terraform refresh
-      id: refresh
-      run: |-
-         terraform refresh \
-          -var="project_id=$PROJECT_ID" \
-          -var="region=$RUN_REGION" \
-          -var="service_name=$REPO_NAME" \
-          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var='sa_permission_list=["roles/run.invoker"]' \
-          -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
-          -var="service_account_id=renderer-identity" \
-          -var="service_account_name=renderer-identity" \
-          -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
-          -var="invoker_member=allUsers" \
-          -var="vendor=gcp"
-      continue-on-error: false
-      working-directory: ./tf-scripts
-      env:
-        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}        
+#     - name: Terraform refresh
+#       id: refresh
+#       run: |-
+#          terraform refresh \
+#           -var="project_id=$PROJECT_ID" \
+#           -var="region=$RUN_REGION" \
+#           -var="service_name=$REPO_NAME" \
+#           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+#           -var='sa_permission_list=["roles/run.invoker"]' \
+#           -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
+#           -var="service_account_id=renderer-identity" \
+#           -var="service_account_name=renderer-identity" \
+#           -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
+#           -var="invoker_member=allUsers" \
+#           -var="vendor=gcp"
+#       continue-on-error: false
+#       working-directory: ./tf-scripts
+#       env:
+#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}        
     - name: Terraform Plan
       id: plan
       run: |-
@@ -77,9 +77,9 @@ jobs:
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
           -var='sa_permission_list=["roles/run.invoker"]' \
           -var='gcp_service_list=["iam.googleapis.com","run.googleapis.com","dataflow.googleapis.com"]' \
-          -var="service_account_id=renderer-identity" \
-          -var="service_account_name=renderer-identity" \
-          -var="cloudrun_service_account=renderer-identity@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="service_account_id=renderer" \
+          -var="service_account_name=renderer" \
+          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
           -var="invoker_member=allUsers" \
           -var="vendor=gcp" \
           -out=PLAN

@@ -27,7 +27,7 @@ gcp_service_list = [
   # "oslogin.googleapis.com",                 # Cloud OS Login API
   #  "pubsub.googleapis.com",                  # PubSub API
   # "resourceviews.googleapis.com",           # Compute Engine Instance Groups API
-  # "run.googleapis.com",                     # Cloud Run API
+   "run.googleapis.com",                     # Cloud Run API
   # "runtimeconfig.googleapis.com",           # Cloud Runtime Configuration API
   # "servicemanagement.googleapis.com",       # Service Management API
   # "servicenetworking.googleapis.com",       # Networking API

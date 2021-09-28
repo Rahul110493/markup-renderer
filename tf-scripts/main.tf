@@ -31,29 +31,29 @@ module "service-account" {
   sa_permission_list=var.sa_permission_list
 }
   
-module "gcp-cloudrun" {
-    count = var.vendor == "gcp" && var.vendor_service == "cloudrun" ? 1 : 0
-    source = "./tf-scripts/gcp/service/cloudrun"
+# module "gcp-cloudrun" {
+#     count = var.vendor == "gcp" && var.vendor_service == "cloudrun" ? 1 : 0
+#     source = "./tf-scripts/gcp/service/cloudrun"
     
-    project_id = var.project_id
-    region = var.region
-    docker_image = var.docker_image
-    cloudrun_service_account = var.cloudrun_service_account
-    service_name = var.service_name
-    invoker_member = var.invoker_member
-    port = var.port
-    env_key = var.env_key
-    env_value = var.env_value
-    depends_on = [module.enable-api, module.service-account]
+#     project_id = var.project_id
+#     region = var.region
+#     docker_image = var.docker_image
+#     cloudrun_service_account = var.cloudrun_service_account
+#     service_name = var.service_name
+#     invoker_member = var.invoker_member
+#     port = var.port
+#     env_key = var.env_key
+#     env_value = var.env_value
+#     depends_on = [module.enable-api, module.service-account]
   
-}
+# }
 
-module "alicloud-ack" {
-    count = var.vendor == "alicloud" && var.vendor_service == "ack" ? 1 : 0
-    source = "./tf-scripts/alicloud/service/ack"
+# module "alicloud-ack" {
+#     count = var.vendor == "alicloud" && var.vendor_service == "ack" ? 1 : 0
+#     source = "./tf-scripts/alicloud/service/ack"
 
-    name = var.name
-#   region = var.ali_region
-    password = var.password
+#     name = var.name
+# #   region = var.ali_region
+#     password = var.password
   
-}
+# }

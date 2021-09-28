@@ -34,16 +34,12 @@ variable "invoker_member" {
   default = ""
 }
 
-variable "env_key" {
-  description = "environment variable key for cloud run Application."
-  type =string
-  default = "dummy"
-}
-
-variable "env_value" {
-  description = "environment variable value for cloud run Application."
-  type =string
-  default = "dummy"
+variable "env_list" {
+  type = "map"
+  default = {
+    "account1" = "accountA"
+    "account2" = "accountB"
+  }
 }
 
 variable "port" {

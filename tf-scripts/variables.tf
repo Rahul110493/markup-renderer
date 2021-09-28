@@ -119,12 +119,6 @@ variable "vendor_service" {
   default     = ""
 }
 
-variable "env_key" {
-  description = "environment variable key for cloud run Application."
-  type =string
-  default = "dummy"
-}
-
 variable "env_map" {
   type = map
   default = {

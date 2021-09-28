@@ -216,29 +216,29 @@ variable "max_instances" {
   description = "(Optional) Limit the degree to which your function will scale in response to incoming requests."
   default     = null
 }
-variable "service_account_id" {
-  description = "The service_account_id of an Google Project"
-  type = string
-  default = ""
-}
+# variable "service_account_id" {
+#   description = "The service_account_id of an Google Project"
+#   type = string
+#   default = ""
+# }
 
-variable "service_account_name" {
-  description = "The service_account_name of an Google Project"
-  type = string
-  default = ""
-}
-variable "gcp_service_list" {
-  description = "The service_account_name of an Google Project"
-  type = list
-  default =  [
-   "iam.googleapis.com",                     # Identity and Access Management (IAM) API
- ]
-}
+# variable "service_account_name" {
+#   description = "The service_account_name of an Google Project"
+#   type = string
+#   default = ""
+# }
+# variable "gcp_service_list" {
+#   description = "The service_account_name of an Google Project"
+#   type = list
+#   default =  [
+#    "iam.googleapis.com",                     # Identity and Access Management (IAM) API
+#  ]
+# }
 
-variable sa_permission_list {
-  description = "The service_account_permissions of an Google Project"
-  type = list
-  default =  [
-   "roles/viewer"                   
- ]  
-}
+# variable sa_permission_list {
+#   description = "The service_account_permissions of an Google Project"
+#   type = list
+#   default =  [
+#    "roles/viewer"                   
+#  ]  
+# }

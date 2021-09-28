@@ -34,7 +34,7 @@ variable "invoker_member" {
   default = ""
 }
 
-variable "env_list" {
+variable "env_map" {
   type = "map"
   default = {
     "account1" = "accountA"

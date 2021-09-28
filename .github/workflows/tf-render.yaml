@@ -1,7 +1,6 @@
 name: Provisioning infrastructure and Deployment for renderer CloudRun
 
 
-
 on: 
   push:
     branches:
@@ -26,10 +25,7 @@ jobs:
       with:
         service_account_key: ${{ secrets.GCP_SA}}
         export_default_credentials: true
-        project_id: ${{ env.PROJECT_ID }}  
-    - name: IAM API Enable    
-      run: |-
-        gcloud services enable ${{env.DEFAULT_API}}        
+        project_id: ${{ env.PROJECT_ID }}      
     - name: Create tf state bucket    
       run: |-
         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi

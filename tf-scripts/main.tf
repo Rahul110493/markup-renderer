@@ -43,8 +43,7 @@ module "gcp-cloudrun" {
     service_name = var.service_name
     invoker_member = var.invoker_member
     port = var.port
-    env_key = var.env_key
-    env_value = var.env_value
+    env_map = var.env_map
     depends_on = [module.enable-api, module.service-account]
   
 }

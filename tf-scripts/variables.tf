@@ -239,6 +239,6 @@ variable sa_permission_list {
   description = "The service_account_permissions of an Google Project"
   type = list
   default =  [
-   "roles/viewer"                   
+   "roles/run.invoker"                   
  ]  
 }

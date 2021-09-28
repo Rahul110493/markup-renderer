@@ -232,6 +232,7 @@ variable "gcp_service_list" {
   type = list
   default =  [
    "iam.googleapis.com",                     # Identity and Access Management (IAM) API
+    "run.googleapis.com"
  ]
 }
 

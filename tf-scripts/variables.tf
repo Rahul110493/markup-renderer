@@ -126,7 +126,7 @@ variable "env_key" {
 }
 
 variable "env_map" {
-  type = "map"
+  type = map
   default = {
     "account1" = "accountA"
     "account2" = "accountB"

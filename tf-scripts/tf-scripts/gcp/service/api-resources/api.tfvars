@@ -19,6 +19,7 @@ gcp_service_list = [
   # "datastore.googleapis.com",               # Datastore API
   # "deploymentmanager.googleapis.com",       # Cloud Deployment Manager V2 API
   #"firestore.googleapis.com",               # Firestore API
+   "cloudresourcemanager.googleapis.com",
    "iam.googleapis.com",                     # Identity and Access Management (IAM) API
   #  "serviceusage.googleapis.com"             # Service Usage API
   # "iamcredentials.googleapis.com",          # IAM Service Account Credentials API
@@ -28,7 +29,6 @@ gcp_service_list = [
   #  "pubsub.googleapis.com",                  # PubSub API
   # "resourceviews.googleapis.com",           # Compute Engine Instance Groups API
    "run.googleapis.com",                     # Cloud Run API
-   "cloudresourcemanager.googleapis.com",
   # "runtimeconfig.googleapis.com",           # Cloud Runtime Configuration API
   # "servicemanagement.googleapis.com",       # Service Management API
   # "servicenetworking.googleapis.com",       # Networking API

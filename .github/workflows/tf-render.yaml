@@ -48,6 +48,14 @@ jobs:
       working-directory: ./tf-scripts
       env:
         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}
+    - name: Terraform refresh
+      id: refresh
+      run: |-
+        terraform refresh
+      continue-on-error: false
+      working-directory: ./tf-scripts
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}        
     - name: Terraform Plan
       id: plan
       run: |-

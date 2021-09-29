@@ -8,9 +8,8 @@ resource "google_cloud_run_service" "default" {
       containers {
         image = "${var.docker_image}"
         env {
-          for_each =  var.env_map
-          name = "${each.key}"
-          value = "${each.value}"
+          name = "${var.env_key}"
+          value = "${var.env_value}"
         }
         ports {
           container_port = var.port

@@ -119,13 +119,18 @@ variable "vendor_service" {
   default     = ""
 }
 
-variable "env_map" {
-  type = map
-  default = {
-    "account1" = "accountA"
-    "account2" = "accountB"
-  }
+variable "env_key" {
+  description = "env_key for cloud"
+  type        = string
+  default     = "dummy"
 }
+
+variable "env_value" {
+  description = "env_value for cloud"
+  type        = string
+  default     = "dummy"
+}
+
 variable "access_key" {
   description = "access_key for ali cloud"
   type        = string

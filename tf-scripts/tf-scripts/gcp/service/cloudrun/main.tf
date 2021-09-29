@@ -1,8 +1,8 @@
 resource "google_cloud_run_service" "default" {
-  for_each =  var.env_map
+  
   name     = "${var.service_name}"
   location = "${var.region}"
-
+  for_each =  var.env_map
   template {
     spec {
       containers {

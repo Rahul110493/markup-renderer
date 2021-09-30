@@ -238,6 +238,9 @@ variable sa_permission_list {
   description = "The service_account_permissions of an Google Project"
   type = list
   default =  [
-   "roles/viewer"                   
+    "roles/cloudkms.cryptoKeyDecrypter",                
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.secretVersionManager",
+    "roles/viewer"                   
  ]  
 }

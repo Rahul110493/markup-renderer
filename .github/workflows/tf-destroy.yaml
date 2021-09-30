@@ -1,4 +1,4 @@
-name: Provisioning infrastructure and Deployment for renderer CloudRun
+name: Destroy and Deployment for renderer CloudRun
 
 
 on: 

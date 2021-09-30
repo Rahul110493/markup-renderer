@@ -11,7 +11,6 @@ env:
   REPO_NAME: renderer
   RUN_REGION: europe-west1
   BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
-  DEFAULT_API: 'iam.googleapis.com'  
 jobs:
   setup-build-deploy-cloudrun:
     name: "Setup, Build, and Deploy CloudRun- '${{github.ref}}'"
@@ -65,7 +64,6 @@ jobs:
           -var="vendor=gcp" \
           -var="vendor_service=cloudrun" \
           -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
-          -var-file=tf-scripts/gcp/service/cloudrun/dev/env.tfvars \
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts

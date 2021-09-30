@@ -43,6 +43,7 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: |-
+         terraform force-unlock -force 1633011684127953
          terraform plan \
           -var="project_id=$PROJECT_ID" \
           -var="region=$RUN_REGION" \

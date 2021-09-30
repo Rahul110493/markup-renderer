@@ -1,0 +1,70 @@
+name: Provisioning infrastructure and Deployment for renderer CloudRun
+
+
+on: 
+  push:
+    branches:
+      - feat-tf     
+env:
+  PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  GOOGLE_CREDENTIALS: ${{ secrets.GCP_SA }}  
+  REPO_NAME: renderer
+  RUN_REGION: europe-west1
+  BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+jobs:
+  setup-build-deploy-cloudrun:
+    name: "Setup, Build, and Deploy CloudRun- '${{github.ref}}'"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    # Setup gcloud CLI  
+    # Setup gcloud CLI  
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCP_SA}}
+        export_default_credentials: true
+        project_id: ${{ env.PROJECT_ID }}      
+    - name: Create tf state bucket    
+      run: |-
+        if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
+    # Terraform remote state GCS
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform init
+      id: init
+      run: |-
+        mv tf-scripts/gcp/service/cloudrun/backend.tf .
+        terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
+      continue-on-error: false
+      working-directory: ./tf-scripts
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}       
+    - name: Terraform Plan
+      id: plan
+      run: |-
+         terraform plan \
+          -var="project_id=$PROJECT_ID" \
+          -var="region=$RUN_REGION" \
+          -var="service_name=$REPO_NAME" \
+          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+          -var="service_account_id=renderer" \
+          -var="service_account_name=renderer" \
+          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="invoker_member=allUsers" \
+          -var="vendor=gcp" \
+          -var="vendor_service=cloudrun" \
+          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
+          -out=PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }} 
+    - name: Terraform destroy
+      id: apply
+      run: |-
+        terraform destroy PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}

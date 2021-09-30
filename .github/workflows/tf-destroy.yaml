@@ -62,7 +62,7 @@ jobs:
     - name: Terraform destroy
       id: apply
       run: |-
-        terraform destroy -force
+        terraform destroy -auto-approve
       continue-on-error: false
       working-directory: ./tf-scripts
       env:

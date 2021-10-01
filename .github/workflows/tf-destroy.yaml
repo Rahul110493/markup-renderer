@@ -1,6 +1,5 @@
 name: Destroy and Deployment for renderer CloudRun
 
-
 on: 
   push:
     branches:

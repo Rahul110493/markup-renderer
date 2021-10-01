@@ -10,4 +10,3 @@ variable "service_account_name" {
   default = ""
 }
 
-variable "sa_permission_list" {}

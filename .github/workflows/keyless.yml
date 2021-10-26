@@ -1,0 +1,55 @@
+name: Create Pool and provider
+
+
+on: 
+  push:
+    branches:
+      - key-less     
+env:
+  PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_ID }}
+  IDENTITY: ${{ secrets.IDENTITY }}  
+#   REPO_NAME: renderer
+#   RUN_REGION: europe-west1
+#   BUCKET_NAME: ${{ secrets.BUCKET_NAME }}
+jobs:
+  setup-build-deploy-cloudrun:
+    name: "Setup, Build, and Deploy CloudRun- '${{github.ref}}'"
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    # Setup gcloud CLI  
+    # Setup gcloud CLI  
+    - uses: google-github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.IDENTITY}}
+        export_default_credentials: true
+        project_id: ${{ env.PROJECT_ID }}  
+    - name: Create Pool and provider
+      run: |-
+        gcloud iam workload-identity-pools create "my-pool" \
+         --project="${PROJECT_ID}" \
+         --location="global" \
+         --display-name="Demo pool"
+    - name: Describe Pool and provider
+      run: |-
+        gcloud iam workload-identity-pools describe "my-pool" \
+         --project="${PROJECT_ID}" \
+         --location="global" \
+         --format="value(name)"
+    - name: Describe Pool and provider
+      run: |-
+         gcloud iam workload-identity-pools providers create-oidc "my-provider" \
+           --project="${PROJECT_ID}" \
+           --location="global" \
+           --workload-identity-pool="my-pool" \
+           --display-name="Demo provider" \
+           --attribute-mapping="google.subject=assertion.sub,attribute.actor=assertion.actor,attribute.aud=assertion.aud" \
+           --issuer-uri="https://vstoken.actions.githubusercontent.com" \
+           --allowed-audiences="sigstore"
+    - name: Describe Pool and provider
+      run: |-
+         gcloud iam workload-identity-pools providers describe "my-provider" \
+          --project="${PROJECT_ID}" \
+          --location="global" \
+          --workload-identity-pool="my-pool"        

@@ -49,56 +49,56 @@ jobs:
       name: 'gcloud'
       run: |-
         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
+        gcloud --quiet auth configure-docker
 
 #     - name: Create tf state bucket    
 #       run: |-
 #         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
-    - name: Enable docker auth
-      run: |-     
-        gcloud --quiet auth configure-docker      
+#     - name: Enable docker auth
+#       run: |-      
     - name: Build and tag image
       run: |-
         docker build . --tag gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA      
     - name: Push image to GCR
       run: |-
         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA
-    # Terraform remote state GCS
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-    - name: Terraform init
-      id: init
-      run: |-
-        mv tf-scripts/gcp/service/cloudrun/backend.tf .
-        terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
-      continue-on-error: false
-      working-directory: ./tf-scripts
-      env:
-        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}       
-    - name: Terraform Plan
-      id: plan
-      run: |-
-         terraform plan \
-          -var="project_id=$PROJECT_ID" \
-          -var="region=$RUN_REGION" \
-          -var="service_name=$REPO_NAME" \
-          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-          -var="service_account_id=renderer" \
-          -var="service_account_name=renderer" \
-          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
-          -var="invoker_member=allUsers" \
-          -var="vendor=gcp" \
-          -var="vendor_service=cloudrun" \
-          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
-          -out=PLAN
-      continue-on-error: false
-      working-directory: ./tf-scripts
-      env:
-        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }} 
-    - name: Terraform apply
-      id: apply
-      run: |-
-        terraform apply PLAN
-      continue-on-error: false
-      working-directory: ./tf-scripts
-      env:
-        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}
+#     # Terraform remote state GCS
+#     - name: Setup Terraform
+#       uses: hashicorp/setup-terraform@v1
+#     - name: Terraform init
+#       id: init
+#       run: |-
+#         mv tf-scripts/gcp/service/cloudrun/backend.tf .
+#         terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
+#       continue-on-error: false
+#       working-directory: ./tf-scripts
+#       env:
+#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}       
+#     - name: Terraform Plan
+#       id: plan
+#       run: |-
+#          terraform plan \
+#           -var="project_id=$PROJECT_ID" \
+#           -var="region=$RUN_REGION" \
+#           -var="service_name=$REPO_NAME" \
+#           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+#           -var="service_account_id=renderer" \
+#           -var="service_account_name=renderer" \
+#           -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
+#           -var="invoker_member=allUsers" \
+#           -var="vendor=gcp" \
+#           -var="vendor_service=cloudrun" \
+#           -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
+#           -out=PLAN
+#       continue-on-error: false
+#       working-directory: ./tf-scripts
+#       env:
+#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }} 
+#     - name: Terraform apply
+#       id: apply
+#       run: |-
+#         terraform apply PLAN
+#       continue-on-error: false
+#       working-directory: ./tf-scripts
+#       env:
+#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}

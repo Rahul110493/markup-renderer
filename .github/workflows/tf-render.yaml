@@ -58,14 +58,14 @@ jobs:
 #         project_id: ${{ env.PROJECT_ID }}
 
     # Configure Workload Identity Federation via a credentials file.
-#     - id: 'auth'
-#       name: 'Authenticate to Google Cloud'
-#       uses: 'google-github-actions/auth@v0.3.1'
-#       with:
-#         create_credentials_file: 'true'
-#         activate_credentials_file: 'true'
-#         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
-#         service_account: 'pipeline@$PROJECT_ID.iam.gserviceaccount.com'
+    - id: 'authtwo'
+      name: 'Authenticate to Google Cloud'
+      uses: google-github-actions/auth@main
+      with:
+        create_credentials_file: 'true'
+        activate_credentials_file: 'true'
+        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+        service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     # Authenticate using the created credentials file.
 #     - id: 'gcloud'
@@ -86,42 +86,36 @@ jobs:
 #       run: |-
 #         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA
 #     # Terraform remote state GCS
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v1
-#     - name: Terraform init
-#       id: init
-#       run: |-
-#         mv tf-scripts/gcp/service/cloudrun/backend.tf .
-#         terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
-#       continue-on-error: false
-#       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}       
-#     - name: Terraform Plan
-#       id: plan
-#       run: |-
-#          terraform plan \
-#           -var="project_id=$PROJECT_ID" \
-#           -var="region=$RUN_REGION" \
-#           -var="service_name=$REPO_NAME" \
-#           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-#           -var="service_account_id=renderer" \
-#           -var="service_account_name=renderer" \
-#           -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
-#           -var="invoker_member=allUsers" \
-#           -var="vendor=gcp" \
-#           -var="vendor_service=cloudrun" \
-#           -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
-#           -out=PLAN
-#       continue-on-error: false
-#       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }} 
-#     - name: Terraform apply
-#       id: apply
-#       run: |-
-#         terraform apply PLAN
-#       continue-on-error: false
-#       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS}}
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform init
+      id: init
+      run: |-
+        mv tf-scripts/gcp/service/cloudrun/backend.tf .
+        terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
+      continue-on-error: false
+      working-directory: ./tf-scripts     
+    - name: Terraform Plan
+      id: plan
+      run: |-
+         terraform plan \
+          -var="project_id=$PROJECT_ID" \
+          -var="region=$RUN_REGION" \
+          -var="service_name=$REPO_NAME" \
+          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+          -var="service_account_id=renderer" \
+          -var="service_account_name=renderer" \
+          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="invoker_member=allUsers" \
+          -var="vendor=gcp" \
+          -var="vendor_service=cloudrun" \
+          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
+          -out=PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts
+    - name: Terraform apply
+      id: apply
+      run: |-
+        terraform apply PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts

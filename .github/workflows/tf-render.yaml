@@ -41,7 +41,7 @@ jobs:
       with:
         create_credentials_file: 'true'
         activate_credentials_file: 'true'
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
         service_account: 'pipeline@$PROJECT_ID.iam.gserviceaccount.com'
 
     # Authenticate using the created credentials file.

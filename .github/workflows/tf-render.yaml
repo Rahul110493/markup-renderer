@@ -74,9 +74,9 @@ jobs:
         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
         gcloud --quiet auth configure-docker
 
-#     - name: Create tf state bucket    
-#       run: |-
-#         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
+    - name: Create tf state bucket    
+      run: |-
+        if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
 #     - name: Enable docker auth
 #       run: |-      
     - name: Build and tag image

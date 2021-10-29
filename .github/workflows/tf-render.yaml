@@ -35,7 +35,8 @@ jobs:
     - name: List buckets in project
       run: |-
           curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-            "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID"      
+            "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID" \
+            | grep $BUCKET_NAME
 #     - name: Login to Artifact Registry
 #       uses: docker/login-action@v1
 #       with:

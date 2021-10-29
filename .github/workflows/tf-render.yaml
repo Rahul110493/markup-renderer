@@ -37,6 +37,21 @@ jobs:
           curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
             "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID" \
             | grep $BUCKET_NAME
+          if $? -ne 0 ;then 
+           cat > BUCKET.json << EOF
+             {
+               "name": $BUCKET_NAME,
+               "location": $BUCKET_LOCATION,
+               "storageClass": "STANDARD",
+               "iamConfiguration": {
+                 "uniformBucketLevelAccess": {
+                 "enabled": true
+            },
+           }
+          }
+          EOF;
+          fi
+          echo $BUCKET.json
 #     - name: Login to Artifact Registry
 #       uses: docker/login-action@v1
 #       with:

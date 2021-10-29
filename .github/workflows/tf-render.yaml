@@ -34,7 +34,7 @@ jobs:
         access_token_lifetime: '300s'
     - name: List buckets in project
       run: |-
-          output = $(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+          output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
             "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID" \
             | grep $BUCKET_NAME | true )
           echo $output

@@ -36,7 +36,7 @@ jobs:
       run: |-
           output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
             "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID" \
-            | grep $BUCKET_NAME | true )
+            | grep $BUCKET_NAME) | true
           echo $output
 #           if $? -ne 0 ;then 
 #            cat > BUCKET.json << EOF

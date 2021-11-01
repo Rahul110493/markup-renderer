@@ -36,5 +36,3 @@ gcp_service_list = [
   # "storage-api.googleapis.com",             # Google Cloud Storage JSON API
   # "storage-component.googleapis.com",       # Cloud Storage API
 ]
-#Appengine location
-location_id       = "europe-west"

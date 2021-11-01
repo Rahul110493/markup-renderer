@@ -47,7 +47,8 @@ jobs:
              },
             }
            }
-           EOF;
+           EOF
+           echo "BUCKET CREATED";
            fi
 
 #     - name: Login to Artifact Registry

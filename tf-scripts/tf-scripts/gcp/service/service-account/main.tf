@@ -1,5 +1,5 @@
 resource "google_service_account" "service_account" {
-  project = "nodejsapp-324007"
+  project = var.project_id
   account_id   = var.service_account_id
   display_name = var.service_account_name
 }

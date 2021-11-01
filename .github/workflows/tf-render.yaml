@@ -106,6 +106,7 @@ jobs:
          terraform plan \
           -var="project_id=$PROJECT_ID" \
           -var="region=$RUN_REGION" \
+          -var="zone=europe-west1-c" \
           -var="service_name=$REPO_NAME" \
           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
           -var="service_account_id=renderer" \

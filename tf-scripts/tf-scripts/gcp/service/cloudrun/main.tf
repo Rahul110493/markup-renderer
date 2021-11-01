@@ -1,5 +1,5 @@
 resource "google_cloud_run_service" "default" {
-  project = "nodejsapp-324007"
+  project = var.project_id
   name     = "${var.service_name}"
   location = "${var.region}"
   

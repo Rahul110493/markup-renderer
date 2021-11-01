@@ -70,9 +70,10 @@ jobs:
         push: true
         tags: gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:${{ github.sha }}
 #     Install gcloud, do not specify authentication.
-#     - uses: 'google-github-actions/setup-gcloud@master'
-#       with:
-#         project_id: ${{ env.PROJECT_ID }}
+    - uses: 'google-github-actions/setup-gcloud@master'
+      with:
+        project_id: ${{ env.PROJECT_ID }}
+        
 
 #     Configure Workload Identity Federation via a credentials file.
     - id: 'authcred'
@@ -83,7 +84,10 @@ jobs:
         activate_credentials_file: 'true'
         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
-        
+    - id: 'gcloud'
+      name: 'gcloud'
+      run: |-
+        gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"        
 #     # Terraform remote state GCS
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1

@@ -21,7 +21,6 @@ module "enable-api" {
   count = var.vendor == "gcp" ? 1 : 0
   source= "./tf-scripts/gcp/service/api-resources"
   gcp_service_list=var.gcp_service_list
-  project_id=var.project_id
 }
   
 module "service-account" {

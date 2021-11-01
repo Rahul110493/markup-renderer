@@ -35,7 +35,7 @@ jobs:
       run: |-
              output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
                "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME")
-             echo $output | grep $BUCKET_NAME
+#         if ! echo $output | grep $BUCKET_NAME ;then echo NOT PRESENT;fi
 #            curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
 #             "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID"               
 #             curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \

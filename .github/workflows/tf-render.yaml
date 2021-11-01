@@ -38,8 +38,8 @@ jobs:
            if ! echo $output | grep $BUCKET_NAME ;then
            cat > BUCKET.json << EOF
            {
-               "name": $BUCKET_NAME,
-               "location": $RUN_REGION,
+               "name": "$BUCKET_NAME",
+               "location": "$RUN_REGION",
                "storageClass": "STANDARD",
                "iamConfiguration": {
                  "uniformBucketLevelAccess": {

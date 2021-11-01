@@ -7,9 +7,9 @@ terraform {
   }
 }
 provider "google-beta" {
-  project = "${var.project_id}"
-  region  = "${var.region}"
-  zone = "${var.zone}"
+  project = var.project_id
+  region  = var.region
+  zone = var.zone
 }
 provider "alicloud" {
   access_key = var.access_key
@@ -21,6 +21,7 @@ module "enable-api" {
   count = var.vendor == "gcp" ? 1 : 0
   source= "./tf-scripts/gcp/service/api-resources"
   gcp_service_list=var.gcp_service_list
+  project_id = var.project_id
 }
   
 module "service-account" {
@@ -28,6 +29,7 @@ module "service-account" {
   source= "./tf-scripts/gcp/service/service-account"
   service_account_id= var.service_account_id
   service_account_name= var.service_account_name
+  project_id = var.project_id
   depends_on = [module.enable-api]
 }
   

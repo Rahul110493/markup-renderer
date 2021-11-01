@@ -56,26 +56,30 @@ jobs:
 #            fi           
 
 
-    - uses: 'google-github-actions/setup-gcloud@master'
+    # Setup gcloud CLI  
+    - uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ env.PROJECT_ID }}
+        service_account_key: ${{ secrets.SERVICE_ACCOUNT}}
+        export_default_credentials: true
+        project_id: ${{ env.PROJECT_ID }}   
 
-    # Configure Workload Identity Federation via a credentials file.
-    - id: 'authcred'
-      name: 'Authenticate to Google Cloud'
-      uses: google-github-actions/auth@main
-      with:
-        create_credentials_file: 'true'
-        activate_credentials_file: 'true'
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
-        service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+#     # Configure Workload Identity Federation via a credentials file.
+#     - id: 'authcred'
+#       name: 'Authenticate to Google Cloud'
+#       uses: google-github-actions/auth@main
+#       with:
+#         create_credentials_file: 'true'
+#         activate_credentials_file: 'true'
+#         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+#         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     # Authenticate using the created credentials file.
     - id: 'gcloud'
       name: 'gcloud'
       run: |-
-        gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"
         gcloud --quiet auth configure-docker
+#       gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"
+
    
     - name: Build and tag image
       run: |-

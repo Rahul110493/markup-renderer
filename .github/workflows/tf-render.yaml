@@ -33,28 +33,22 @@ jobs:
         access_token_lifetime: '300s'
     - name: List buckets in project
       run: |-
-             output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-               "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME")
-             if ! echo $output | grep $BUCKET_NAME ;then echo NOT PRESENT;fi 
-#            curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-#             "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID"               
-#             curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-#             "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME"
-#           echo $output
-#           if $? -ne 0 ;then 
-#            cat > BUCKET.json << EOF
-#              {
-#                "name": $BUCKET_NAME,
-#                "location": $BUCKET_LOCATION,
-#                "storageClass": "STANDARD",
-#                "iamConfiguration": {
-#                  "uniformBucketLevelAccess": {
-#                  "enabled": true
-#             },
-#            }
-#           }
-#           EOF;
-#           fi
+           output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+             "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME")
+           if ! echo $output | grep $BUCKET_NAME ;then
+           cat > BUCKET.json << EOF
+             {
+               "name": $BUCKET_NAME,
+               "location": $RUN_REGION,
+               "storageClass": "STANDARD",
+               "iamConfiguration": {
+                 "uniformBucketLevelAccess": {
+                 "enabled": true
+             },
+            }
+           }
+           EOF;
+           fi
 
 #     - name: Login to Artifact Registry
 #       uses: docker/login-action@v1

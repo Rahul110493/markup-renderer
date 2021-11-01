@@ -52,7 +52,7 @@ jobs:
            curl -X POST --data-binary @BUCKET.json \
             -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
             -H "Content-Type: application/json" \
-           "https://storage.googleapis.com/storage/v1/b?project=$PROJECT_ID"
+           "https://storage.googleapis.com/storage/v1/b?project=${{ env.PROJECT_ID }}"
            echo "BUCKET CREATED";
            fi           
 

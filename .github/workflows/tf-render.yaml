@@ -21,39 +21,39 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - id: auth
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@main
-      with:
-        token_format: access_token
-        # Value from Terraform output.
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
-        service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
-        access_token_lifetime: '300s'
-    - name: List buckets in project
-      run: |-
-           output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-             "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME")
-           if ! echo $output | grep $BUCKET_NAME ;then
-           cat > BUCKET.json << EOF
-           {
-               "name": "$BUCKET_NAME",
-               "location": "$RUN_REGION",
-               "storageClass": "STANDARD",
-               "iamConfiguration": {
-                 "uniformBucketLevelAccess": {
-                 "enabled": true
-             }
-            }
-           }
-           EOF
-           cat BUCKET.json;
-           curl -X POST --data-binary @BUCKET.json \
-            -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
-            -H "Content-Type: application/json" \
-           "https://storage.googleapis.com/storage/v1/b?project=${{ env.PROJECT_ID }}"
-           echo "BUCKET CREATED";
-           fi           
+#     - id: auth
+#       name: Authenticate to Google Cloud
+#       uses: google-github-actions/auth@main
+#       with:
+#         token_format: access_token
+#         # Value from Terraform output.
+#         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+#         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+#         access_token_lifetime: '300s'
+#     - name: List buckets in project
+#       run: |-
+#            output=$(curl -X GET -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+#              "https://storage.googleapis.com/storage/v1/b/$BUCKET_NAME")
+#            if ! echo $output | grep $BUCKET_NAME ;then
+#            cat > BUCKET.json << EOF
+#            {
+#                "name": "$BUCKET_NAME",
+#                "location": "$RUN_REGION",
+#                "storageClass": "STANDARD",
+#                "iamConfiguration": {
+#                  "uniformBucketLevelAccess": {
+#                  "enabled": true
+#              }
+#             }
+#            }
+#            EOF
+#            cat BUCKET.json;
+#            curl -X POST --data-binary @BUCKET.json \
+#             -H "Authorization: Bearer ${{ steps.auth.outputs.access_token }}" \
+#             -H "Content-Type: application/json" \
+#            "https://storage.googleapis.com/storage/v1/b?project=${{ env.PROJECT_ID }}"
+#            echo "BUCKET CREATED";
+#            fi           
 
 
     - uses: 'google-github-actions/setup-gcloud@master'

@@ -79,8 +79,8 @@ jobs:
     - id: 'gcloud'
       name: 'gcloud'
       run: |-
-        gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"
-        gcloud --quiet auth configure-docker
+         gcloud --quiet auth configure-docker
+#         gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"
 
 
    

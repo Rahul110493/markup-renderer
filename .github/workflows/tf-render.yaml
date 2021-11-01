@@ -70,9 +70,9 @@ jobs:
         push: true
         tags: gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:${{ github.sha }}
 #     Install gcloud, do not specify authentication.
-    - uses: 'google-github-actions/setup-gcloud@master'
-      with:
-        project_id: ${{ env.PROJECT_ID }}
+#     - uses: 'google-github-actions/setup-gcloud@master'
+#       with:
+#         project_id: ${{ env.PROJECT_ID }}
 
 #     Configure Workload Identity Federation via a credentials file.
     - id: 'authcred'

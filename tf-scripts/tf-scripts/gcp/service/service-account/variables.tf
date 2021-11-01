@@ -10,3 +10,4 @@ variable "service_account_name" {
   default = ""
 }
 
+variable "project_id" {}

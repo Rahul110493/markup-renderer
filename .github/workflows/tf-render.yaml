@@ -57,30 +57,29 @@ jobs:
 
 
     # Setup gcloud CLI  
-#     - uses: google-github-actions/setup-gcloud@master
-#       with:
-#         service_account_key: ${{ secrets.GCP_SA }} 
-#         export_default_credentials: true
-#         project_id: ${{ env.PROJECT_ID }}   
     - uses: google-github-actions/setup-gcloud@master
       with:
-        project_id: ${{ env.PROJECT_ID }} 
+        service_account_key: ${{ secrets.GCP_SA }} 
+        export_default_credentials: true
+        project_id: ${{ env.PROJECT_ID }}   
+#     - uses: google-github-actions/setup-gcloud@master
+#       with:
+#         project_id: ${{ env.PROJECT_ID }} 
 #     # Configure Workload Identity Federation via a credentials file.
-    - id: 'authcred'
-      name: 'Authenticate to Google Cloud'
-      uses: google-github-actions/auth@main
-      with:
-        create_credentials_file: 'true'
-        activate_credentials_file: 'true'
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
-        service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+#     - id: 'authcred'
+#       name: 'Authenticate to Google Cloud'
+#       uses: google-github-actions/auth@main
+#       with:
+#         create_credentials_file: 'true'
+#         activate_credentials_file: 'true'
+#         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+#         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     # Authenticate using the created credentials file.
     - id: 'gcloud'
       name: 'gcloud'
       run: |-
         gcloud auth login --brief --cred-file="${{ steps.authcred.outputs.credentials_file_path }}"
-        gcloud config set project ${{ env.PROJECT_ID }}
         gcloud --quiet auth configure-docker
 
 
@@ -101,8 +100,8 @@ jobs:
         terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
       continue-on-error: false
       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      
     - name: Terraform Plan
       id: plan
       run: |-
@@ -121,13 +120,13 @@ jobs:
           -out=PLAN
       continue-on-error: false
       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      
     - name: Terraform apply
       id: apply
       run: |-
         terraform apply PLAN
       continue-on-error: false
       working-directory: ./tf-scripts
-#       env:
-#         GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      
+      env:
+        GOOGLE_CREDENTIALS: ${{ env.GOOGLE_CREDENTIALS }}      

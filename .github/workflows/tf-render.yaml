@@ -20,8 +20,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-#     - name: Set up Docker Buildx
-#       uses: docker/setup-buildx-action@v1
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
     - id: auth
       name: Authenticate to Google Cloud
       uses: google-github-actions/auth@main
@@ -57,90 +57,64 @@ jobs:
            fi           
 
 
-#     - name: Login to Artifact Registry
-#       uses: docker/login-action@v1
-#       with:
-#         registry: gcr.io
-#         username: oauth2accesstoken
-#         password: ${{ steps.auth.outputs.access_token }}
-#     - id: docker_push
-#       name: Build and push
-#       uses: docker/build-push-action@v2
-#       with:
-#         push: true
-#         tags: gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:${{ github.sha }}      
-    # Setup gcloud CLI  
-    # Setup gcloud CLI  
-#     - uses: google-github-actions/setup-gcloud@master
-#       with:
-#         service_account_key: ${{ secrets.GCP_SA}}
-#         export_default_credentials: true
-#         project_id: ${{ env.PROJECT_ID }}  
+    - name: Login to Artifact Registry
+      uses: docker/login-action@v1
+      with:
+        registry: gcr.io
+        username: oauth2accesstoken
+        password: ${{ steps.auth.outputs.access_token }}
+    - id: docker_push
+      name: Build and push
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:${{ github.sha }}
+#     Install gcloud, do not specify authentication.
+    - uses: 'google-github-actions/setup-gcloud@master'
+      with:
+        project_id: ${{ env.PROJECT_ID }}
 
-    # Install gcloud, do not specify authentication.
-#     - uses: 'google-github-actions/setup-gcloud@master'
-#       with:
-#         project_id: ${{ env.PROJECT_ID }}
-
-    # Configure Workload Identity Federation via a credentials file.
-#     - id: 'auth'
-#       name: 'Authenticate to Google Cloud'
-#       uses: google-github-actions/auth@main
-#       with:
-#         create_credentials_file: 'true'
-#         activate_credentials_file: 'true'
-#         workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
-#         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
-
-    # Authenticate using the created credentials file.
-#     - id: 'gcloud'
-#       name: 'gcloud'
-#       run: |-
-#         gcloud auth login --brief --cred-file="${{ steps.auth.outputs.credentials_file_path }}"
-#         gcloud --quiet auth configure-docker
-
-#     - name: Create tf state bucket    
-#       run: |-
-#         if ! gsutil ls | grep gs://${{ env.BUCKET_NAME }} ;then gsutil mb -p ${{ env.PROJECT_ID }} -l ${{ env.RUN_REGION }} -b on gs://${{ env.BUCKET_NAME }};fi
-# #     - name: Enable docker auth
-# #       run: |-      
-#     - name: Build and tag image
-#       run: |-
-#         docker build . --tag gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA      
-#     - name: Push image to GCR
-#       run: |-
-#         docker push gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}:$GITHUB_SHA
-# #     # Terraform remote state GCS
-#     - name: Setup Terraform
-#       uses: hashicorp/setup-terraform@v1
-#     - name: Terraform init
-#       id: init
-#       run: |-
-#         mv tf-scripts/gcp/service/cloudrun/backend.tf .
-#         terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
-#       continue-on-error: false
-#       working-directory: ./tf-scripts     
-#     - name: Terraform Plan
-#       id: plan
-#       run: |-
-#          terraform plan \
-#           -var="project_id=$PROJECT_ID" \
-#           -var="region=$RUN_REGION" \
-#           -var="service_name=$REPO_NAME" \
-#           -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
-#           -var="service_account_id=renderer" \
-#           -var="service_account_name=renderer" \
-#           -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
-#           -var="invoker_member=allUsers" \
-#           -var="vendor=gcp" \
-#           -var="vendor_service=cloudrun" \
-#           -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
-#           -out=PLAN
-#       continue-on-error: false
-#       working-directory: ./tf-scripts
-#     - name: Terraform apply
-#       id: apply
-#       run: |-
-#         terraform apply PLAN
-#       continue-on-error: false
-#       working-directory: ./tf-scripts
+#     Configure Workload Identity Federation via a credentials file.
+    - id: 'authcred'
+      name: 'Authenticate to Google Cloud'
+      uses: google-github-actions/auth@main
+      with:
+        create_credentials_file: 'true'
+        activate_credentials_file: 'true'
+        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+        service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
+        
+#     # Terraform remote state GCS
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform init
+      id: init
+      run: |-
+        mv tf-scripts/gcp/service/cloudrun/backend.tf .
+        terraform init  -backend-config="bucket=$BUCKET_NAME" -backend-config="prefix=dev"
+      continue-on-error: false
+      working-directory: ./tf-scripts     
+    - name: Terraform Plan
+      id: plan
+      run: |-
+         terraform plan \
+          -var="project_id=$PROJECT_ID" \
+          -var="region=$RUN_REGION" \
+          -var="service_name=$REPO_NAME" \
+          -var="docker_image=gcr.io/$PROJECT_ID/$REPO_NAME:$GITHUB_SHA" \
+          -var="service_account_id=renderer" \
+          -var="service_account_name=renderer" \
+          -var="cloudrun_service_account=renderer@$PROJECT_ID.iam.gserviceaccount.com" \
+          -var="invoker_member=allUsers" \
+          -var="vendor=gcp" \
+          -var="vendor_service=cloudrun" \
+          -var-file=tf-scripts/gcp/service/api-resources/api.tfvars \
+          -out=PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts
+    - name: Terraform apply
+      id: apply
+      run: |-
+        terraform apply PLAN
+      continue-on-error: false
+      working-directory: ./tf-scripts

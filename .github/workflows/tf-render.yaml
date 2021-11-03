@@ -29,7 +29,7 @@ jobs:
       with:
         token_format: access_token
         # Value from Terraform output.
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+        workload_identity_provider: ${{ secrets.PROVIDER_URL }}
         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
         access_token_lifetime: '300s'
     - name: List buckets in project
@@ -86,7 +86,7 @@ jobs:
       with:
         create_credentials_file: 'true'
         activate_credentials_file: 'true'
-        workload_identity_provider: 'projects/1031827147042/locations/global/workloadIdentityPools/key-pool/providers/key-provider'
+        workload_identity_provider: ${{ secrets.PROVIDER_URL }}
         service_account: 'pipeline@${{ env.PROJECT_ID }}.iam.gserviceaccount.com'
 
     # Authenticate using the created credentials file.

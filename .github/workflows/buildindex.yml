@@ -1,0 +1,26 @@
+name: Check Build Index
+on:
+  workflow_dispatch:
+    inputs:
+      BUILD_INDEX_FILE:  
+        description: 'BUILD_INDEX_FILE'     
+        required: false
+        default: ''
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show inputs
+        run: | 
+          echo "environment is ${{ github.event.inputs.BUILD_INDEX_FILE }}"
+      - name: Build-Deploy
+        run: |-     
+          echo "environment is ${{ github.event.inputs.BUILD_INDEX_FILE }}"
+          if [ ${{ github.event.inputs.BUILD_INDEX_FILE }} ]
+          then
+            echo "Index Supplied"
+          else
+            echo "Index not supplied"
+          fi
+          echo "Code was built..."           
